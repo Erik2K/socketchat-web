@@ -1,7 +1,7 @@
 import { SignInRequest } from '@/app/lib/types/auth/signin'
 
 export async function SignIn (request: SignInRequest) {
-  const response = await fetch(`${process.env.API_URL}/api/auth/signin`, {
+  const response = await fetch('/api/auth/signin', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
