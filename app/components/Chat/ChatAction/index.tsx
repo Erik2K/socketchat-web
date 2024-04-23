@@ -1,0 +1,39 @@
+import React, { useState } from 'react'
+import { Input } from '@nextui-org/input'
+import { Button } from '@nextui-org/button'
+import { Spacer } from '@nextui-org/spacer'
+import styles from '@/app/ui/styles/chat.module.css'
+
+const ChatAction = ({ sendMessage }) => {
+  const [message, setMessage] = useState('')
+
+  const onMessageChange = (message: string) => {
+    setMessage(message)
+  }
+
+  const onclickHandler = () => {
+    sendMessage(message)
+    setMessage('')
+  }
+
+  return (
+    <div className={styles.chatAction}>
+      <Input
+          type="text"
+          fullWidth
+          value={message}
+          onValueChange={onMessageChange}
+        />
+        <Spacer x={5} />
+        <Button
+          variant="ghost"
+          size="lg"
+          onClick={onclickHandler}
+        >
+          Send
+        </Button>
+    </div>
+  )
+}
+
+export default ChatAction

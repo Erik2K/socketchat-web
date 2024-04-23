@@ -1,0 +1,12 @@
+.chat {
+  
+}
+
+.chatAction {
+  padding: 1%;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  display: inline-flex;
+}

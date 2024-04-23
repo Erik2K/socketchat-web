@@ -1,6 +1,7 @@
+import React from 'react'
 import styles from '@/app/ui/styles/auth.module.css'
 
-export default function AuthLayout({
+export default function AuthLayout ({
   children
 }: {
   children: React.ReactNode
