@@ -10,3 +10,9 @@
   width: 100%;
   display: inline-flex;
 }
+
+.chatBox {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+}

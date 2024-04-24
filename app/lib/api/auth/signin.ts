@@ -12,5 +12,9 @@ export async function SignIn (request: SignInRequest) {
 
   if (!response.ok) throw new Error('Failed to login')
 
-  return response.json()
+  const data = await response.json()
+
+  localStorage.setItem('user', JSON.stringify(data))
+
+  return data
 }

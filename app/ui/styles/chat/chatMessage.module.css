@@ -1,0 +1,30 @@
+.chatMessage {
+  background-color: #616A6B;
+  border-radius: 10px;
+  width: auto;
+  margin: 5px;
+  padding: 5px;
+  display: inline-block;
+}
+
+.chatMessageMe {
+  background-color: #5DADE2;
+  border-radius: 10px;
+  min-width: 5%;
+  width: auto;
+  margin: 5px;
+  padding: 5px;
+  display: inline-block;
+  color: black;
+  text-align: left;
+}
+
+.username {
+  padding: 5px 10px 5px 10px;
+  color: #1d1d1d;
+}
+
+.message {
+  padding: 5px 10px 5px 10px;
+  color: black;
+}
