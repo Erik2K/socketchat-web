@@ -18,7 +18,7 @@ const ChatBox = ({ emitMessage, socket }: any) => {
   }
 
   const chatMessages = messages.map((message: ChatMessageI) => {
-    return <ChatMessage data={message} />
+    return <ChatMessage key={0} data={message} />
   })
 
   return (
