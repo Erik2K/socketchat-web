@@ -1,4 +1,7 @@
 'use client'
+
+import React, { useState } from 'react'
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from '@nextui-org/react'
 import { Input } from '@nextui-org/input'
 import { Button } from '@nextui-org/button'
 import { Spacer } from '@nextui-org/spacer'
@@ -6,27 +9,49 @@ import { Checkbox } from '@nextui-org/checkbox'
 import Link from 'next/link'
 import styles from '@/app/ui/styles/signin.module.css'
 import authStyles from '@/app/ui/styles/auth.module.css'
-import React, { useState } from 'react'
-import { SignIn } from '@/app/lib/api/auth/signin'
+import { Recover, SignIn } from '@/app/lib/api/auth'
 import { useRouter } from 'next/navigation'
+import { errorToast, successToast } from '@/app/utils/toasts'
 
 export default function LoginPage () {
   const router = useRouter()
-  const [loading, setLoading] = useState(false)
+  const [loadingLogin, setLoadingLogin] = useState(false)
+  const [LoadingForgot, setLoadingForgot] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [forgotEmail, setForgotEmail] = useState('')
   const [emailError, setEmailError] = useState(false)
   const [passwordError, setPasswordError] = useState(false)
+  const [forgotEmailError, setForgotEmailError] = useState(false)
+  const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
-  const onCllickHandler = () => {
-    setLoading(true)
+  const handleLogin = () => {
+    setLoadingLogin(true)
     SignIn({ email, password })
-      .then((res) => router.push('/'))
-      .catch((err) => {
-        console.log(err)
-        setLoading(false)
+      .then(() => router.push('/'))
+      .catch(() => {
+        setLoadingLogin(false)
         setEmailError(true)
         setPasswordError(true)
+        errorToast()
+      })
+  }
+
+  const handleForgot = (close: any) => {
+    setLoadingForgot(true)
+    Recover({ email: forgotEmail })
+      .then(() => {
+        close()
+        setLoadingForgot(false)
+        setForgotEmail('')
+        setForgotEmailError(false)
+
+        successToast('Recovery email has been sent successfully')
+      })
+      .catch(() => {
+        setLoadingForgot(false)
+        setForgotEmailError(true)
+        errorToast()
       })
   }
 
@@ -40,6 +65,11 @@ export default function LoginPage () {
     setPasswordError(false)
   }
 
+  const onForgotEmailChange = (email: string) => {
+    setForgotEmail(email)
+    setForgotEmailError(false)
+  }
+
   return (
     <main className={styles.container}>
       <h1 className={authStyles.title}>Login</h1>
@@ -47,6 +77,7 @@ export default function LoginPage () {
       <Input
         isRequired
         fullWidth
+        variant='bordered'
         type="email"
         label="Email"
         onValueChange={onEmailChange}
@@ -56,6 +87,7 @@ export default function LoginPage () {
       <Input
         isRequired
         fullWidth
+        variant='bordered'
         type="password"
         label="Password"
         onValueChange={onPasswordChange}
@@ -63,15 +95,16 @@ export default function LoginPage () {
       />
       <Spacer y={4} />
       <Checkbox className={styles.remember}>Remeber me</Checkbox>
-      <Link className={styles.forgot} href="/auth/forgot">Forgot password?</Link>
+      <span className={styles.forgot} onClick={onOpen} >Forgot password?</span>
       <Spacer y={20} />
       <Button
         type="submit"
-        isLoading={loading}
+        isLoading={loadingLogin}
         fullWidth
         variant="ghost"
         size="lg"
-        onClick={onCllickHandler}
+        onClick={handleLogin}
+        isDisabled={emailError || passwordError || !password || !email}
       >
         Login
       </Button>
@@ -80,6 +113,42 @@ export default function LoginPage () {
         Don&apos;t have an account?
         <Link href="/auth/signup">Register</Link>
       </p>
+      <Modal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        placement='top-center'
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">Forgot password</ModalHeader>
+              <ModalBody>
+                <Input
+                  isRequired
+                  value={forgotEmail}
+                  type='email'
+                  label="Email"
+                  variant="bordered"
+                  onValueChange={onForgotEmailChange}
+                  isInvalid={forgotEmailError}
+                  errorMessage={forgotEmailError ? 'Email not found' : ''}
+                />
+              </ModalBody>
+              <ModalFooter>
+                <span>* You will recieve an email with the instructions</span>
+                <Button
+                  variant="ghost"
+                  isLoading={LoadingForgot}
+                  onClick={() => handleForgot(onClose)}
+                  isDisabled={forgotEmailError || !forgotEmail}
+                >
+                  Send email
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </main>
   )
 }

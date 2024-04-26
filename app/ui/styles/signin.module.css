@@ -10,6 +10,7 @@
 .forgot {
     text-decoration: underline;
     float: right;
+    cursor: pointer;
 }
 
 .register {
