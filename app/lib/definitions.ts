@@ -1,3 +1,8 @@
+export type User = {
+  email: string,
+  username: string
+}
+
 // Auth
 
 export type SignInRequest = {
@@ -36,7 +41,14 @@ export type ChangePasswordRequest = {
 
 // Chat
 
-export type ChatMessage = {
-  username: string
+export type ChatRoom = {
+  _id: string
+  room: string,
+  userId: string
+}
+
+export type Message = {
+  room: string
   message: string
+  username: string
 }

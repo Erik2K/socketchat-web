@@ -18,7 +18,6 @@ export default function RecoverPage ({ params }: {params: { token: string }}) {
   const [passwordError, setPasswordError] = useState(false)
   const [rPasswordError, setRPasswordError] = useState(false)
 
-  // TODO: use SWR
   useEffect(() => {
     CheckRecover(params.token)
       .then((res: CheckRecoverResponse) => {
@@ -27,7 +26,7 @@ export default function RecoverPage ({ params }: {params: { token: string }}) {
       .catch(() => {
         setNotFoundError(true)
       })
-  })
+  }, [params.token])
 
   if (notFoundError) return notFound()
 

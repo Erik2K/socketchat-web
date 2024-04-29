@@ -1,5 +1,16 @@
 import { ChangePasswordRequest, RecoverRequest, SignInRequest, SignUpRequest } from '../definitions'
 
+// Me
+export async function Me () {
+  const response = await fetch('/api/auth/me')
+
+  if (!response.ok) throw new Error('Failed to get')
+
+  const data = await response.json()
+
+  return data
+}
+
 // SignIn
 export async function SignIn (request: SignInRequest) {
   const response = await fetch('/api/auth/signin', {

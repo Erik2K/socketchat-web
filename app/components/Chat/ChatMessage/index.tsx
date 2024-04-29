@@ -1,14 +1,15 @@
 import React from 'react'
 import styles from '@/app/ui/styles/chat/chatMessage.module.css'
-import { ChatMessageI } from '@/app/lib/types/chat/chat'
+import { Message } from '@/app/lib/definitions'
 
 interface ChatMessageProps {
-  data: ChatMessageI
+  data: Message
+  user: any
 }
 
-const ChatMessage = ({ data }: ChatMessageProps) => {
-  const user = JSON.parse(localStorage.getItem('user') ?? '')
-  const me = user.username === data.username
+const ChatMessage = ({ data, user }: ChatMessageProps) => {
+  const me = data.username === user.username
+  console.log({ data })
 
   return (
     <div style={me ? { textAlign: 'right' } : {}}>

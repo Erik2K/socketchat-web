@@ -4,7 +4,7 @@ import { Button } from '@nextui-org/button'
 import { Spacer } from '@nextui-org/spacer'
 import styles from '@/app/ui/styles/chat/chat.module.css'
 
-const ChatAction = ({ sendMessage }: any) => {
+const ChatAction = ({ sendMessage, user }: any) => {
   const [message, setMessage] = useState('')
 
   const onMessageChange = (message: string) => {
@@ -13,7 +13,7 @@ const ChatAction = ({ sendMessage }: any) => {
 
   const onclickHandler = () => {
     sendMessage({
-      username: JSON.parse(localStorage.getItem('user') ?? '')?.username,
+      username: user?.username,
       message
     })
 

@@ -5,7 +5,7 @@
 .chatAction {
   padding: 1%;
   bottom: 0;
-  left: 0;
+  right: 0;
   position: absolute;
   width: 100%;
   display: inline-flex;
@@ -13,6 +13,14 @@
 
 .chatBox {
   height: 100%;
-  width: 100%;
+  position: relative;
+  width: 85%;
   overflow: auto;
+}
+
+.unselected {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

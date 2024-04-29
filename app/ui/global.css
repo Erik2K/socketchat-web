@@ -2,19 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-.main-container {
+.chat-main {
     position: absolute;
     background-color: #1F1F1F;
-    width: 100rem;
+    width: 50%;
     height: 55rem;
-    left: 50%;
+    left: 100%;
     top: 50%;
     margin-left: -50rem;
     margin-top: -27.5rem;
-    padding: 3rem 4rem;
-}
-
-.chat-main {
-    height: 90%;
-    width: 100%;
+    display: inline-flex;
 }
