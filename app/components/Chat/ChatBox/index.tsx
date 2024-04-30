@@ -20,9 +20,10 @@ const ChatBox = ({ emitMessage, socket, chat, user }: any) => {
 
   const AlwaysScrollToBottom = () => {
     const elementRef = useRef()
-    useEffect(() => elementRef.current.scrollIntoView())
+    useEffect(() => elementRef?.current?.scrollIntoView())
     return <div ref={elementRef} />
   }
+  
 
   const handleMessage = (message: Message) => {
     setMessages([...messages, { ...message, room: chat._id }])
