@@ -23,7 +23,6 @@ const ChatBox = ({ emitMessage, socket, chat, user }: any) => {
     useEffect(() => elementRef?.current?.scrollIntoView())
     return <div ref={elementRef} />
   }
-  
 
   const handleMessage = (message: Message) => {
     setMessages([...messages, { ...message, room: chat._id }])
