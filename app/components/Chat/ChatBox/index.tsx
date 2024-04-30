@@ -19,7 +19,7 @@ const ChatBox = ({ emitMessage, socket, chat, user }: any) => {
   }
 
   const AlwaysScrollToBottom = () => {
-    const elementRef = useRef()
+    const elementRef = useRef<null | HTMLElement>()
     useEffect(() => elementRef?.current?.scrollIntoView())
     return <div ref={elementRef} />
   }
