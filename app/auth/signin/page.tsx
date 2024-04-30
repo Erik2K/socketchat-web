@@ -7,8 +7,7 @@ import { Button } from '@nextui-org/button'
 import { Spacer } from '@nextui-org/spacer'
 import { Checkbox } from '@nextui-org/checkbox'
 import Link from 'next/link'
-import styles from '@/app/ui/styles/signin.module.css'
-import authStyles from '@/app/ui/styles/auth.module.css'
+import styles from '@/app/ui/styles/auth.module.css'
 import { Recover, SignIn } from '@/app/lib/api/auth'
 import { useRouter } from 'next/navigation'
 import { errorToast, successToast } from '@/app/utils/toasts'
@@ -71,8 +70,8 @@ export default function LoginPage () {
   }
 
   return (
-    <main className={styles.container}>
-      <h1 className={authStyles.title}>Login</h1>
+    <main className={styles.formContainer}>
+      <h1 className={styles.title}>Login</h1>
       <Spacer y={12} />
       <Input
         isRequired

@@ -1,13 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import ChatAction from '../ChatAction'
 import ChatMessage from '../ChatMessage'
 import { Message } from '@/app/lib/definitions'
-import styles from '@/app/ui/styles/chat/chat.module.css'
-import UseUser from '@/app/hooks/useUser'
+import styles from '@/app/ui/styles/chat.module.css'
+import { ScrollShadow } from '@nextui-org/react'
 
-const ChatBox = ({ emitMessage, socket, chat }: any) => {
+const ChatBox = ({ emitMessage, socket, chat, user }: any) => {
   const [messages, setMessages] = useState<Message[]>([])
-  const user = UseUser()
 
   socket.on('message', (message: any) => {
     setMessages([...messages, message])
@@ -17,6 +16,12 @@ const ChatBox = ({ emitMessage, socket, chat }: any) => {
     socket.emit('join', chat.room)
   } else {
     return (<div className={styles.unselected}> Select a chat </div>)
+  }
+
+  const AlwaysScrollToBottom = () => {
+    const elementRef = useRef()
+    useEffect(() => elementRef.current.scrollIntoView())
+    return <div ref={elementRef} />
   }
 
   const handleMessage = (message: Message) => {
@@ -30,8 +35,11 @@ const ChatBox = ({ emitMessage, socket, chat }: any) => {
 
   return (
     <div className={styles.chatBox}>
+      <ScrollShadow hideScrollBar className={styles.messageBox}>
+        {chatMessages}
+        <AlwaysScrollToBottom />
+      </ScrollShadow>
       <ChatAction sendMessage={ handleMessage } user={user} />
-      {chatMessages}
     </div>
   )
 }

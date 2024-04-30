@@ -5,7 +5,7 @@ import { Input } from '@nextui-org/input'
 import { Button } from '@nextui-org/button'
 import { Spacer } from '@nextui-org/spacer'
 import Link from 'next/link'
-import authStyles from '@/app/ui/styles/auth.module.css'
+import styles from '@/app/ui/styles/auth.module.css'
 import { useRouter } from 'next/navigation'
 import { SignUp } from '@/app/lib/api/auth'
 import { errorToast } from '@/app/utils/toasts'
@@ -59,7 +59,7 @@ export default function RegisterPage () {
 
   return (
     <div>
-      <h1 className={authStyles.title}>Register</h1>
+      <h1 className={styles.title}>Register</h1>
       <Spacer y={12} />
       <Input
         isRequired

@@ -1,6 +1,6 @@
 import React from 'react'
-import styles from '@/app/ui/styles/chat/chatMessage.module.css'
 import { Message } from '@/app/lib/definitions'
+import styles from '@/app/ui/styles/chat.module.css'
 
 interface ChatMessageProps {
   data: Message
@@ -14,8 +14,8 @@ const ChatMessage = ({ data, user }: ChatMessageProps) => {
   return (
     <div style={me ? { textAlign: 'right' } : {}}>
       <div className={me ? styles.chatMessageMe : styles.chatMessage}>
-        <div className={styles.username}>{me ? 'yo' : data.username}</div>
-        <div className={styles.message}>{data.message}</div>
+        <div className={styles.messageUsername}>{me ? 'yo' : data.username}</div>
+        <div className={styles.messageBody}>{data.message}</div>
       </div>
     </div>
   )

@@ -3,34 +3,39 @@
 import React, { useEffect, useState } from 'react'
 import { GetUserChats } from '@/app/lib/api/chat'
 import { ChatRoom } from '@/app/lib/definitions'
-import style from '@/app/ui/styles/chat/chatList.module.css'
+import style from '@/app/ui/styles/chat.module.css'
 import { errorToast } from '@/app/utils/toasts'
+import ListedChat from '../ListedChat'
+import ChatCreate from '../ChatCreate'
 
-const ChatList = ({ selectedChat }: any) => {
+const ChatList = ({ selectedChat, user }: any) => {
   const [chats, setChats] = useState<ChatRoom[]>([])
+  const [newChat, setNewChat] = useState(true)
 
   useEffect(() => {
-    GetUserChats()
-      .then(chats => {
-        setChats(chats)
-      })
-      .catch(() => {
-        errorToast()
-      })
-  }, [])
+    if (newChat) {
+      GetUserChats()
+        .then(chats => {
+          setChats(chats)
+          setNewChat(false)
+        })
+        .catch(() => {
+          errorToast()
+        })
+    }
+  }, [newChat])
 
   const handleClick = (chat: ChatRoom) => {
     selectedChat(chat)
   }
 
   return (
-    <div className={style.list}>
+    <div className={style.chatList}>
+      <ChatCreate newChat={setNewChat}/>
       {
         chats.map(chat => {
           return (
-            <div className={style.chat} key={chat._id} onClick={() => handleClick(chat)}>
-              { chat._id }
-            </div>
+            <ListedChat key={chat._id} chat={chat} user={user} onSelectChat={handleClick} />
           )
         })
       }

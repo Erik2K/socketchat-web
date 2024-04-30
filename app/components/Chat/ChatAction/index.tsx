@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Input } from '@nextui-org/input'
 import { Button } from '@nextui-org/button'
 import { Spacer } from '@nextui-org/spacer'
-import styles from '@/app/ui/styles/chat/chat.module.css'
+import styles from '@/app/ui/styles/chat.module.css'
 
 const ChatAction = ({ sendMessage, user }: any) => {
   const [message, setMessage] = useState('')
@@ -20,6 +20,12 @@ const ChatAction = ({ sendMessage, user }: any) => {
     setMessage('')
   }
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      onclickHandler()
+    }
+  }
+
   return (
     <div className={styles.chatAction}>
       <Input
@@ -27,6 +33,7 @@ const ChatAction = ({ sendMessage, user }: any) => {
           fullWidth
           value={message}
           onValueChange={onMessageChange}
+          onKeyDown={handleKeyDown}
         />
         <Spacer x={5} />
         <Button
