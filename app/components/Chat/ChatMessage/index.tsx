@@ -9,7 +9,6 @@ interface ChatMessageProps {
 
 const ChatMessage = ({ data, user }: ChatMessageProps) => {
   const me = data.username === user.username
-  console.log({ data })
 
   return (
     <div style={me ? { textAlign: 'right' } : {}}>

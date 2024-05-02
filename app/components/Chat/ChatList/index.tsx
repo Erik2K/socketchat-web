@@ -7,10 +7,16 @@ import style from '@/app/ui/styles/chat.module.css'
 import { errorToast } from '@/app/utils/toasts'
 import ListedChat from '../ListedChat'
 import ChatCreate from '../ChatCreate'
+import ListedChatSkeleton from '../ListedChat/skeleton'
 
-const ChatList = ({ selectedChat, user }: any) => {
+const ChatList = ({ onChatSelected, socket, user }: any) => {
   const [chats, setChats] = useState<ChatRoom[]>([])
+  const [selectedChat, setSelectedChat] = useState<ChatRoom>()
   const [newChat, setNewChat] = useState(true)
+
+  socket.on('message', () => {
+    setNewChat(true)
+  })
 
   useEffect(() => {
     if (newChat) {
@@ -26,18 +32,36 @@ const ChatList = ({ selectedChat, user }: any) => {
   }, [newChat])
 
   const handleClick = (chat: ChatRoom) => {
-    selectedChat(chat)
+    onChatSelected(chat)
+    setSelectedChat(chat)
+  }
+
+  const loadSkeleton = () => {
+    return (
+      <div>
+        <ListedChatSkeleton />
+        <ListedChatSkeleton />
+        <ListedChatSkeleton />
+        <ListedChatSkeleton />
+        <ListedChatSkeleton />
+        <ListedChatSkeleton />
+        <ListedChatSkeleton />
+        <ListedChatSkeleton />
+      </div>
+    )
   }
 
   return (
     <div className={style.chatList}>
       <ChatCreate newChat={setNewChat}/>
       {
-        chats.map(chat => {
-          return (
-            <ListedChat key={chat._id} chat={chat} user={user} onSelectChat={handleClick} />
-          )
-        })
+        !chats.length
+          ? loadSkeleton()
+          : chats.map(chat => {
+            return (
+              <ListedChat key={chat._id} chat={chat} user={user} selected={chat === selectedChat} onSelectChat={handleClick} />
+            )
+          })
       }
     </div>
   )

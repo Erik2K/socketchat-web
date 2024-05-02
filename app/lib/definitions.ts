@@ -42,10 +42,42 @@ export type ChangePasswordRequest = {
 
 // Chat
 
+export type GetChatResponse = {
+  _id: string
+  messages: [
+    {
+      _id: string
+      body: string
+      user: {
+        _id: string
+        username: string
+      }
+    }
+  ]
+}
+
+export type CreateChatRequest = {
+  users: [string]
+}
+
 export type ChatRoom = {
   _id: string
-  room: string,
-  userId: string
+  room: {
+    _id: string
+    users: [
+      {
+        _id: string
+        username: string
+      }
+    ]
+  },
+  messages: [
+    {
+      _id: string
+      body: string
+      user: string
+    }
+  ]
 }
 
 export type Message = {

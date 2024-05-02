@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from 'react'
 import { Me } from '../lib/api/auth'
 
 const useUser = () => {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState()
 
   useEffect(() => {
     Me()

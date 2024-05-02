@@ -26,8 +26,6 @@ export async function SignIn (request: SignInRequest) {
 
   const data = await response.json()
 
-  localStorage.setItem('user', JSON.stringify(data))
-
   return data
 }
 
@@ -45,8 +43,6 @@ export async function SignUp (request: SignUpRequest) {
   if (!response.ok) throw new Error('Failed to sign up')
 
   const data = await response.json()
-
-  localStorage.setItem('user', JSON.stringify(data))
 
   return data
 }

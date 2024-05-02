@@ -14,6 +14,7 @@ const ChatAction = ({ sendMessage, user }: any) => {
   const onclickHandler = () => {
     sendMessage({
       username: user?.username,
+      email: user?.email,
       message
     })
 

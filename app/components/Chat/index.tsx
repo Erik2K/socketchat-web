@@ -7,12 +7,14 @@ import useUser from '@/app/hooks/useUser'
 import styles from '@/app/ui/styles/chat.module.css'
 
 const Chat = () => {
-  const { socket } = useSocket()
   const user = useUser()
   const [chat, setChat] = useState<ChatRoom | undefined>()
+  const { socket } = useSocket()
+
+  console.log({ chat })
 
   const handleMessage = (message: Message) => {
-    socket.emit('message', { ...message, room: chat?.room })
+    socket.emit('message', { ...message, room: chat?.room._id })
   }
 
   const handleChat = (chat: ChatRoom) => {
@@ -21,7 +23,7 @@ const Chat = () => {
 
   return (
     <div className={styles.chatMain}>
-      <ChatList selectedChat={handleChat} user={user} />
+      <ChatList onChatSelected={handleChat} socket={socket} user={user} />
       <ChatBox emitMessage={handleMessage} socket={socket} chat={chat} user={user} />
     </div>
   )

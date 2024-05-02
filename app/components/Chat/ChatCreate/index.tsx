@@ -3,6 +3,8 @@ import styles from '@/app/ui/styles/chat.module.css'
 import UserSearch from '../../User/UserSearch'
 import { Button, Modal, ModalContent, ModalBody, ModalHeader, useDisclosure, ModalFooter } from '@nextui-org/react'
 import { User } from '@/app/lib/definitions'
+import { CreateChat } from '@/app/lib/api/chat'
+import { errorToast } from '@/app/utils/toasts'
 
 const ChatCreate = ({ user, newChat }: any) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
@@ -18,7 +20,17 @@ const ChatCreate = ({ user, newChat }: any) => {
   }
 
   const handleCreateChat = () => {
-    newChat(true)
+    CreateChat({ users: [selectedUser!.email] })
+      .then(chat => {
+        if (chat) {
+          onOpenChange()
+          newChat(true)
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+        errorToast()
+      })
   }
 
   return (
