@@ -1,30 +1,26 @@
-import React, { useState } from 'react'
-import useSocket from '@/app/hooks/useSocket'
+import React, { useEffect } from 'react'
 import ChatBox from './ChatBox'
-import { ChatRoom, Message } from '@/app/lib/definitions'
 import ChatList from './ChatList'
-import useUser from '@/app/hooks/useUser'
 import styles from '@/app/ui/styles/chat.module.css'
+import { useChatPreviewStore } from '@/app/store/chatPreviews'
+import { useUserStore } from '@/app/store/user'
+import { useSocketStore } from '@/app/store/socket'
 
 const Chat = () => {
-  const user = useUser()
-  const [chat, setChat] = useState<ChatRoom | undefined>()
-  const { socket } = useSocket()
+  const fetchChatPreviews = useChatPreviewStore(state => state.fetchChatPreviews)
+  const fetchMe = useUserStore(statate => statate.fetchMe)
+  const socketConnect = useSocketStore(state => state.connect)
 
-  console.log({ chat })
-
-  const handleMessage = (message: Message) => {
-    socket.emit('message', { ...message, room: chat?.room._id })
-  }
-
-  const handleChat = (chat: ChatRoom) => {
-    setChat(chat)
-  }
+  useEffect(() => {
+    fetchMe()
+    fetchChatPreviews()
+    socketConnect()
+  }, [fetchChatPreviews, fetchMe, socketConnect])
 
   return (
     <div className={styles.chatMain}>
-      <ChatList onChatSelected={handleChat} socket={socket} user={user} />
-      <ChatBox emitMessage={handleMessage} socket={socket} chat={chat} user={user} />
+      <ChatList />
+      <ChatBox />
     </div>
   )
 }

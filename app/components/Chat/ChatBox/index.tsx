@@ -1,38 +1,59 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useRef, useEffect } from 'react'
 import ChatAction from '../ChatAction'
 import ChatMessage from '../ChatMessage'
-import { Message } from '@/app/lib/definitions'
 import styles from '@/app/ui/styles/chat.module.css'
 import { ScrollShadow } from '@nextui-org/react'
-import { GetChat } from '@/app/lib/api/chat'
-import { errorToast } from '@/app/utils/toasts'
+import { useChatStore } from '@/app/store/chat'
+import { useUserStore } from '@/app/store/user'
+import { useSocketStore } from '@/app/store/socket'
+import { MarkChatReaded } from '@/app/lib/api/chat'
+import { useChatPreviewStore } from '@/app/store/chatPreviews'
+import { useShallow } from 'zustand/react/shallow'
+import { Message } from '@/app/lib/definitions'
+import ChatBoxSkeleton from './skeleton'
 
-const ChatBox = ({ emitMessage, socket, chat, user }: any) => {
-  const [messages, setMessages] = useState<Message[]>([])
-
-  socket.on('message', (message: any) => {
-    if (message.room === chat?.room._id) {
-      setMessages([...messages, message])
-    }
-  })
+const ChatBox = () => {
+  const emitMessage = useSocketStore(state => state.emitMessage)
+  const fetchChatPreviews = useChatPreviewStore(useShallow(state => state.fetchChatPreviews))
+  const user = useUserStore(state => state.user)
+  const fetchChat = useChatStore(state => state.fetchChat)
+  const currentChat = useChatStore(state => state.currentChat)
+  const chat = useChatStore(state => state.chat)
+  const messages = useChatStore(useShallow(state => state.messages))
+  const addMessage = useChatStore(state => state.addMessage)
+  const loading = useChatStore(state => state.loading)
 
   useEffect(() => {
-    if (chat) {
-      GetChat(chat?._id)
-        .then((chat) => {
-          setMessages([...chat.messages.map(message => {
-            return {
-              message: message.body,
-              username: message.user.username,
-              room: ''
-            }
-          })])
-        })
-        .catch(() => {
-          errorToast()
+    if (currentChat) {
+      fetchChat()
+      MarkChatReaded(currentChat)
+        .then(() => {
+          fetchChatPreviews()
         })
     }
-  }, [chat])
+  }, [currentChat, fetchChat, fetchChatPreviews])
+
+  const handleMessage = (message: string) => {
+    addMessage({
+      _id: '',
+      body: message,
+      user: {
+        _id: user?._id!,
+        username: user?.username!
+      }
+    })
+
+    emitMessage({
+      body: message,
+      room: chat?.room!,
+      user: {
+        _id: user?._id!,
+        username: user?.username!
+      }
+    })
+
+    fetchChatPreviews()
+  }
 
   const AlwaysScrollToBottom = () => {
     const elementRef = useRef<any>()
@@ -40,24 +61,21 @@ const ChatBox = ({ emitMessage, socket, chat, user }: any) => {
     return <div ref={elementRef} />
   }
 
-  const handleMessage = (message: Message) => {
-    setMessages([...messages, message])
-    emitMessage(message)
-  }
-
   const chatMessages = messages.map((message: Message, index) => {
-    return <ChatMessage key={index} data={message} user={user} />
+    return <ChatMessage key={index} message={message} />
   })
-
-  if (!chat) return <div className={styles.unselected}>Select a chat</div>
 
   return (
     <div className={styles.chatBox}>
       <ScrollShadow hideScrollBar className={styles.messageBox}>
-        {chatMessages}
+        {
+          loading && currentChat
+            ? <ChatBoxSkeleton />
+            : chatMessages
+        }
         <AlwaysScrollToBottom />
       </ScrollShadow>
-      <ChatAction sendMessage={ handleMessage } user={user} />
+      <ChatAction sendMessage={handleMessage} />
     </div>
   )
 }

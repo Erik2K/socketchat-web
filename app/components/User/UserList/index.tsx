@@ -31,10 +31,10 @@ const UserList = ({ users, loading, selectedUser }: UserListProps) => {
               {
                 users.map(user => {
                   return (
-                    <>
-                      <ListedUser key={user._id} user={user} selectedUser={onUserSelected} selected={user === userSelected} />
+                    <div key={user._id}>
+                      <ListedUser user={user} selectedUser={onUserSelected} selected={user === userSelected} />
                       <Spacer y={3} />
-                    </>
+                    </div>
                   )
                 })
               }

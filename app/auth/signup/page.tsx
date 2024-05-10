@@ -9,6 +9,7 @@ import styles from '@/app/ui/styles/auth.module.css'
 import { useRouter } from 'next/navigation'
 import { SignUp } from '@/app/lib/api/auth'
 import { errorToast } from '@/app/utils/toasts'
+import { useUserStore } from '@/app/store/user'
 
 export default function RegisterPage () {
   const router = useRouter()
@@ -21,11 +22,15 @@ export default function RegisterPage () {
   const [emailError, setEmailError] = useState(false)
   const [passwordError, setPasswordError] = useState(false)
   const [rPasswordError, setRPasswordError] = useState(false)
+  const setUser = useUserStore(state => state.setUser)
 
   const onCllickHandler = () => {
     setLoading(true)
     SignUp({ username, email, password })
-      .then(() => router.push('/'))
+      .then((user) => {
+        setUser(user)
+        router.push('/')
+      })
       .catch(() => {
         setLoading(false)
         setUsernameError(true)

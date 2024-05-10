@@ -11,6 +11,7 @@ import styles from '@/app/ui/styles/auth.module.css'
 import { Recover, SignIn } from '@/app/lib/api/auth'
 import { useRouter } from 'next/navigation'
 import { errorToast, successToast } from '@/app/utils/toasts'
+import { useUserStore } from '@/app/store/user'
 
 export default function LoginPage () {
   const router = useRouter()
@@ -19,19 +20,21 @@ export default function LoginPage () {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [forgotEmail, setForgotEmail] = useState('')
-  const [emailError, setEmailError] = useState(false)
-  const [passwordError, setPasswordError] = useState(false)
-  const [forgotEmailError, setForgotEmailError] = useState(false)
+  const [error, setError] = useState(false)
+  const [forgotError, setForgotError] = useState(false)
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const setUser = useUserStore(state => state.setUser)
 
   const handleLogin = () => {
     setLoadingLogin(true)
     SignIn({ email, password })
-      .then(() => router.push('/'))
+      .then((user) => {
+        setUser(user)
+        router.push('/')
+      })
       .catch(() => {
         setLoadingLogin(false)
-        setEmailError(true)
-        setPasswordError(true)
+        setError(true)
         errorToast()
       })
   }
@@ -43,30 +46,30 @@ export default function LoginPage () {
         close()
         setLoadingForgot(false)
         setForgotEmail('')
-        setForgotEmailError(false)
+        setForgotError(false)
 
         successToast('Recovery email has been sent successfully')
       })
       .catch(() => {
         setLoadingForgot(false)
-        setForgotEmailError(true)
+        setForgotError(true)
         errorToast()
       })
   }
 
   const onEmailChange = (email: string) => {
     setEmail(email)
-    setEmailError(false)
+    setError(false)
   }
 
   const onPasswordChange = (password: string) => {
     setPassword(password)
-    setPasswordError(false)
+    setError(false)
   }
 
   const onForgotEmailChange = (email: string) => {
     setForgotEmail(email)
-    setForgotEmailError(false)
+    setForgotError(false)
   }
 
   return (
@@ -80,7 +83,7 @@ export default function LoginPage () {
         type="email"
         label="Email"
         onValueChange={onEmailChange}
-        isInvalid={emailError}
+        isInvalid={error}
       />
       <Spacer y={10} />
       <Input
@@ -90,7 +93,7 @@ export default function LoginPage () {
         type="password"
         label="Password"
         onValueChange={onPasswordChange}
-        isInvalid={passwordError}
+        isInvalid={error}
       />
       <Spacer y={4} />
       <Checkbox className={styles.remember}>Remeber me</Checkbox>
@@ -103,7 +106,7 @@ export default function LoginPage () {
         variant="ghost"
         size="lg"
         onClick={handleLogin}
-        isDisabled={emailError || passwordError || !password || !email}
+        isDisabled={error || !password || !email}
       >
         Login
       </Button>
@@ -129,8 +132,8 @@ export default function LoginPage () {
                   label="Email"
                   variant="bordered"
                   onValueChange={onForgotEmailChange}
-                  isInvalid={forgotEmailError}
-                  errorMessage={forgotEmailError ? 'Email not found' : ''}
+                  isInvalid={forgotError}
+                  errorMessage={forgotError ? 'Email not found' : ''}
                 />
               </ModalBody>
               <ModalFooter>
@@ -139,7 +142,7 @@ export default function LoginPage () {
                   variant="ghost"
                   isLoading={LoadingForgot}
                   onClick={() => handleForgot(onClose)}
-                  isDisabled={forgotEmailError || !forgotEmail}
+                  isDisabled={forgotError || !forgotEmail}
                 >
                   Send email
                 </Button>

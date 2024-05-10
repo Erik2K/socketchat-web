@@ -1,7 +1,7 @@
-import { ChangePasswordRequest, RecoverRequest, SignInRequest, SignUpRequest } from '../definitions'
+import { ChangePasswordRequest, RecoverRequest, SignInRequest, SignUpRequest, User } from '../definitions'
 
 // Me
-export async function Me () {
+export async function Me (): Promise<User> {
   const response = await fetch('/api/auth/me')
 
   if (!response.ok) throw new Error('Failed to get')
@@ -12,7 +12,7 @@ export async function Me () {
 }
 
 // SignIn
-export async function SignIn (request: SignInRequest) {
+export async function SignIn (request: SignInRequest): Promise<User> {
   const response = await fetch('/api/auth/signin', {
     method: 'POST',
     headers: {
@@ -30,7 +30,7 @@ export async function SignIn (request: SignInRequest) {
 }
 
 // SignUp
-export async function SignUp (request: SignUpRequest) {
+export async function SignUp (request: SignUpRequest): Promise<User> {
   const response = await fetch('/api/auth/signup', {
     method: 'POST',
     headers: {

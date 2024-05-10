@@ -11,20 +11,10 @@ export type SignInRequest = {
   password: string
 }
 
-export type SignInRespose = {
-  email: string,
-  password: string
-}
-
 export type SignUpRequest = {
   email: string,
   username: string,
   password: string,
-}
-
-export type SignUpResponse = {
-  email: string,
-  username: string
 }
 
 export type RecoverRequest = {
@@ -42,25 +32,35 @@ export type ChangePasswordRequest = {
 
 // Chat
 
-export type GetChatResponse = {
-  _id: string
-  messages: [
-    {
-      _id: string
-      body: string
-      user: {
-        _id: string
-        username: string
-      }
-    }
-  ]
-}
-
 export type CreateChatRequest = {
   users: [string]
 }
 
+export type Message = {
+  _id: string
+  body: string
+  user: {
+    _id: string
+    username: string
+  }
+}
+
+export type EmittedMessage = {
+  body: string
+  room: string
+  user: {
+    _id: string
+    username: string
+  }
+}
+
 export type ChatRoom = {
+  _id: string
+  room: string
+  messages: Message[]
+}
+
+export type ChatPreview = {
   _id: string
   room: {
     _id: string
@@ -71,17 +71,6 @@ export type ChatRoom = {
       }
     ]
   },
-  messages: [
-    {
-      _id: string
-      body: string
-      user: string
-    }
-  ]
-}
-
-export type Message = {
-  room: string
-  message: string
-  username: string
+  messages: Message[]
+  unreaded: number
 }

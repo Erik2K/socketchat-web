@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { NextUIProvider } from '@nextui-org/react'
+import '@/app/ui/global.css'
 
 export function Providers ({
   children

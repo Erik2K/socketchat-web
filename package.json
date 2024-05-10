@@ -18,7 +18,8 @@
     "react-content-loader": "7.0.0",
     "react-dom": "^18",
     "socket.io-client": "4.7.5",
-    "sonner": "1.4.41"
+    "sonner": "1.4.41",
+    "zustand": "4.5.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.0.2",
